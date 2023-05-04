@@ -11,7 +11,6 @@ using log4net;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 var config = new ConfigurationBuilder()
         .AddJsonFile("appsettings.json", optional: false)
         .Build();
