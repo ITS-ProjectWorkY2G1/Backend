@@ -4,6 +4,6 @@ namespace Services.Interfaces
 {
     public interface IAccountService
     {
-        Task Register(RegisterModel registerModel);
+        Task RegisterAsync(RegisterModel registerModel);
     }
 }

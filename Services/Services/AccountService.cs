@@ -13,7 +13,7 @@ namespace Services.Services
             _userManager = userManager;
         }
 
-        public async Task Register(RegisterModel registerModel)
+        public async Task RegisterAsync(RegisterModel registerModel)
         {
             var user = await _userManager.FindByEmailAsync(registerModel.Email);
             if (user != null)
