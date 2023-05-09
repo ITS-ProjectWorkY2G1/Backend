@@ -135,13 +135,6 @@ namespace AuthBackend.Controllers.Api
                 case ConsentTypes.Explicit when authorizations.Any() && !request.HasPrompt(Prompts.Consent):
                     var principal = await _signInManager.CreateUserPrincipalAsync(user);
 
-                    try
-                    {
-                        var role = await _userManager.GetRolesAsync(user);
-                        var r = _roleManager.Roles.First(x => x.Name == role.First());
-                    }
-                    catch (Exception ex) { throw new ArgumentException(ex.Message); }
-
                     principal.SetScopes(request.GetScopes());
                     principal.SetResources(await _scopeManager.ListResourcesAsync(principal.GetScopes()).ToListAsync());
 
@@ -234,16 +227,6 @@ namespace AuthBackend.Controllers.Api
             }
 
             var principal = await _signInManager.CreateUserPrincipalAsync(user);
-
-            try
-            {
-                var role = await _userManager.GetRolesAsync(user);
-                var r = _roleManager.Roles.First(x => x.Name == role.First());
-            }
-            catch (Exception ex) {
-                _logger.LogError(ex,"");
-                throw new ArgumentException(ex.Message); 
-            }
 
             principal.SetScopes(request.GetScopes());
             principal.SetResources(await _scopeManager.ListResourcesAsync(principal.GetScopes()).ToListAsync());
@@ -354,28 +337,6 @@ namespace AuthBackend.Controllers.Api
                 claimsPrincipal = (await HttpContext.AuthenticateAsync(OpenIddictServerAspNetCoreDefaults.AuthenticationScheme)).Principal!;
 
             }
-            else if (request.IsClientCredentialsGrantType())
-            {
-                var identity = new ClaimsIdentity(OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
-
-                // Subject (sub) is a required field, we use the client id as the subject identifier here.
-                identity.AddClaim(Claims.Subject, request.ClientId ?? throw new InvalidOperationException());
-
-                // Add some claim, don't forget to add destination otherwise it won't be added to the access token.
-                var role = await _roleManager.FindByNameAsync("Anonymous");
-                var claim = role!.Claims.FirstOrDefault();
-
-                claimsPrincipal = new ClaimsPrincipal(identity);
-
-                claimsPrincipal.AddClaim(claim!.Type, true);
-
-                foreach (var c in claimsPrincipal.Claims)
-                {
-                    c.SetDestinations(GetDestinations(c, claimsPrincipal));
-                }
-
-                claimsPrincipal.SetScopes(request.GetScopes());
-            }
             else
             {
                 throw new InvalidOperationException("The specified grant type is not supported.");
@@ -403,14 +364,6 @@ namespace AuthBackend.Controllers.Api
                     yield return Destinations.AccessToken;
 
                     if (principal.HasScope(Scopes.Email))
-                        yield return Destinations.IdentityToken;
-
-                    yield break;
-
-                case Claims.Role:
-                    yield return Destinations.AccessToken;
-
-                    if (principal.HasScope(Scopes.Roles))
                         yield return Destinations.IdentityToken;
 
                     yield break;

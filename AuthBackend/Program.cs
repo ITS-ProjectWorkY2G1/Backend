@@ -37,7 +37,6 @@ builder.Services.Configure<IdentityOptions>(options =>
     // which saves you from doing the mapping in your authorization controller.
     options.ClaimsIdentity.UserNameClaimType = Claims.Name;
     options.ClaimsIdentity.UserIdClaimType = Claims.Subject;
-    options.ClaimsIdentity.RoleClaimType = Claims.Role;
     options.ClaimsIdentity.EmailClaimType = Claims.Email;
 
     options.SignIn.RequireConfirmedAccount = false;
@@ -64,7 +63,7 @@ builder.Services.AddOpenIddict()
                 .SetUserinfoEndpointUris("/connect/userinfo");
 
         // Mark the "email", "profile" and "roles" scopes as supported scopes.
-        options.RegisterScopes(Scopes.Email, Scopes.Profile, Scopes.Roles);
+        options.RegisterScopes(Scopes.Email, Scopes.Profile);
 
         // Note: this sample only uses the authorization code flow but you can enable
         // the other flows if you need to support implicit, password or client credentials.
