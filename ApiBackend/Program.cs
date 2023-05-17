@@ -21,7 +21,7 @@ builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
 
 builder.Services.AddDbContext<WatchContext>(opt =>
 {
-    opt.UseNpgsql("user id=postgres;password=password;host=localhost;database=postgres");
+    opt.UseNpgsql("user id=postgres;password=password;host=datadb.a5bybwhraxb4a0dk.westeurope.azurecontainer.io;database=postgres");
 });
 
 builder.Services.AddScoped<IAccountService, AccountService>();
