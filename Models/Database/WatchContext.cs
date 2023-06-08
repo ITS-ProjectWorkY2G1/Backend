@@ -24,6 +24,8 @@ public partial class WatchContext : IdentityDbContext<ApplicationUser>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        modelBuilder.Entity<Smartwatch>()
+            .HasKey(c => new { c.Id, c.Timestamp });
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);

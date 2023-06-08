@@ -6,7 +6,7 @@ namespace Models.WatchModels
 {
     [Table("smartwatches", Schema = "pw_gruppo1")]
     public class Smartwatch
-    {
+    {      
         [Column("id")]
         public Guid Id { get; set; }
         [Column("position")]
