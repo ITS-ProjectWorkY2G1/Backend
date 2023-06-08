@@ -19,7 +19,7 @@ public partial class WatchContext : IdentityDbContext<ApplicationUser>
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseNpgsql("user id=postgres;password=password;host=datadb.a5bybwhraxb4a0dk.westeurope.azurecontainer.io; database=postgres");
+        => optionsBuilder.UseNpgsql("user id=postgres;password=password;host=pwg1db.uksouth.cloudapp.azure.com; database=postgres");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
