@@ -8,5 +8,6 @@ namespace Services.Services
         Task<List<Smartwatch>> GetAllSmartwatchesAsync();
         Task<List<Session>> GetSessionsAsync(Guid userId);
         Task<List<Smartwatch>> GetSmartwatchAsync(Guid userId, Guid SessionId);
+        Task<List<FullSessionViewModel>> GetFullSessionAsync(Guid userId);
     }
 }

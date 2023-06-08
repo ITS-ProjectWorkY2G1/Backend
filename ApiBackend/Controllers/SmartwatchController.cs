@@ -27,11 +27,8 @@ namespace ApiBackend.Controllers
         [HttpGet("GetAllSessions")]
         public async Task<List<Session>> GetAllSessions() =>
             await _smartwatchService.GetAllSessionsAsync();
-        [HttpGet("Test")]
-        public async Task<IActionResult> Test()
-        {
-            var x = User.Claims;
-            return Ok();
-        }
+        [HttpGet("GetFullSessionsList")]
+        public async Task<List<FullSessionViewModel>> GetFullSessionsList(Guid userId) =>
+            await _smartwatchService.GetFullSessionAsync(userId);
     }
 }
