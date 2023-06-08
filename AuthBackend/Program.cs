@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Identity;
 using AuthBackend;
-using Models.Database;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 using MongoDB.Driver;
 using Microsoft.IdentityModel.Tokens;
@@ -8,6 +7,9 @@ using Models.AuthModels;
 using Microsoft.AspNetCore.Diagnostics;
 using static System.Net.Mime.MediaTypeNames;
 using log4net;
+using Models;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,14 +17,16 @@ var config = new ConfigurationBuilder()
         .AddJsonFile("appsettings.json", optional: false)
         .Build();
 
-builder.Services.Configure<DatabaseSettings>("IdentityDatabase",
-    builder.Configuration.GetSection("IdentityDatabase"));
+builder.Services.AddDbContext<WatchContext>(opt =>
+{
+    opt.UseOpenIddict();
+});
 
-builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
-        .AddMongoDbStores<ApplicationUser, ApplicationRole, Guid>
-        (
-            config["IdentityDatabase:ConnectionString"], "Auth"
-        );
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+            .AddEntityFrameworkStores<WatchContext>()
+            .AddDefaultTokenProviders();
 
 builder.Services.AddControllersWithViews()
     .AddJsonOptions(
@@ -50,7 +54,8 @@ builder.Services.Configure<IdentityOptions>(options =>
 builder.Services.AddOpenIddict()
     .AddCore(options =>
     {
-        options.UseMongoDb().UseDatabase(new MongoClient(config["IdentityDatabase:ConnectionString"]).GetDatabase("Auth"));        
+        options.UseEntityFrameworkCore()
+        .UseDbContext<WatchContext>();
     })
 
     .AddServer(options =>
@@ -59,8 +64,7 @@ builder.Services.AddOpenIddict()
         // Enable the authorization, introspection and token endpoints.
         options.SetAuthorizationEndpointUris("/connect/authorize")
                 .SetLogoutEndpointUris("/connect/logout")
-                .SetTokenEndpointUris("/connect/token")
-                .SetUserinfoEndpointUris("/connect/userinfo");
+                .SetTokenEndpointUris("/connect/token");
 
         // Mark the "email", "profile" and "roles" scopes as supported scopes.
         options.RegisterScopes(Scopes.Email, Scopes.Profile);
@@ -115,6 +119,8 @@ builder.Services.AddOpenIddict()
 builder.Services.AddAuthorization();
 
 builder.Services.AddHostedService<Worker>();
+builder.Services.AddScoped<UserManager<ApplicationUser>, UserManager<ApplicationUser>>();
+
 
 var app = builder.Build();
 

@@ -1,12 +1,8 @@
-﻿using AspNetCore.Identity.MongoDbCore.Models;
-using MongoDB.Bson.Serialization.Attributes;
-using MongoDbGenericRepository.Attributes;
-using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
 
 namespace Models.AuthModels
 {
-    [CollectionName("Roles")]
-    public class ApplicationRole : MongoIdentityRole<Guid>
+    public class ApplicationRole : IdentityRole
     {
     }
 }

@@ -9,11 +9,13 @@
   <ItemGroup>
     <PackageReference Include="AspNetCore.Identity.MongoDbCore" Version="3.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="8.0.0-preview.3.23177.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.16" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.5" />
     <PackageReference Include="MongoDB.Driver" Version="2.19.1" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.4" />
     <PackageReference Include="OpenIddict" Version="4.3.0" />
     <PackageReference Include="OpenIddict.AspNetCore" Version="4.3.0" />
+    <PackageReference Include="OpenIddict.EntityFrameworkCore" Version="4.3.0" />
     <PackageReference Include="OpenIddict.MongoDb" Version="4.3.0" />
     <PackageReference Include="OpenIddict.Server" Version="4.3.0" />
     <PackageReference Include="OpenIddict.Server.AspNetCore" Version="4.3.0" />

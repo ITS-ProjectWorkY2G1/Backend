@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Models;
 using Models.AuthModels;
 using Models.Database;
 using Services.Interfaces;
@@ -13,16 +14,14 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
-        .AddMongoDbStores<ApplicationUser, ApplicationRole, Guid>
-        (
-            "mongodb://localhost:27017", "Auth"
-        ).AddDefaultTokenProviders();
-
 builder.Services.AddDbContext<WatchContext>(opt =>
 {
     opt.UseNpgsql("user id=postgres;password=password;host=datadb.a5bybwhraxb4a0dk.westeurope.azurecontainer.io;database=postgres");
 });
+
+builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
+                .AddEntityFrameworkStores<WatchContext>()
+                .AddDefaultTokenProviders();
 
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<ISmartwatchServices, SmartwatchServices>();

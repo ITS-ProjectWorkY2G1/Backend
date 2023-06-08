@@ -28,7 +28,7 @@ namespace AuthBackend.Controllers.Api
         private readonly ILogger<AuthorizationController> _logger;
         public AuthorizationController(IOpenIddictApplicationManager applicationManager, IOpenIddictAuthorizationManager authorizationManager,
             UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IOpenIddictScopeManager scopeManager,
-            IServiceScopeFactory scopeFactory, RoleManager<ApplicationRole> roleManager, ILogger<AuthorizationController> logger)
+            IServiceScopeFactory scopeFactory, ILogger<AuthorizationController> logger)
         {
             _applicationManager = applicationManager;
             _authorizationManager = authorizationManager;
@@ -36,7 +36,6 @@ namespace AuthBackend.Controllers.Api
             _signInManager = signInManager;
             _scopeManager = scopeManager;
             _scopeFactory = scopeFactory;
-            _roleManager = roleManager;
             _logger = logger;
         }
 
@@ -135,6 +134,12 @@ namespace AuthBackend.Controllers.Api
                 case ConsentTypes.Explicit when authorizations.Any() && !request.HasPrompt(Prompts.Consent):
                     var principal = await _signInManager.CreateUserPrincipalAsync(user);
 
+                    try
+                    {
+                        principal.AddClaim("Id", user.Id);
+                    }
+                    catch (Exception ex) { throw new ArgumentException(ex.Message); }
+
                     principal.SetScopes(request.GetScopes());
                     principal.SetResources(await _scopeManager.ListResourcesAsync(principal.GetScopes()).ToListAsync());
 
@@ -227,6 +232,12 @@ namespace AuthBackend.Controllers.Api
             }
 
             var principal = await _signInManager.CreateUserPrincipalAsync(user);
+
+            try
+            {
+                principal.AddClaim("Id", user.Id);
+            }
+            catch (Exception ex) { throw new ArgumentException(ex.Message); }
 
             principal.SetScopes(request.GetScopes());
             principal.SetResources(await _scopeManager.ListResourcesAsync(principal.GetScopes()).ToListAsync());

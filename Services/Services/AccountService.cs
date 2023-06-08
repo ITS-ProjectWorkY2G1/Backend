@@ -21,7 +21,7 @@ namespace Services.Services
                 throw new ArgumentException("User email already taken");
             }
 
-            var newuser = new ApplicationUser { UserName = registerModel.Username, Id = Guid.NewGuid(), Email = registerModel.Email };
+            var newuser = new ApplicationUser { UserName = registerModel.Username, Id = Guid.NewGuid().ToString(), Email = registerModel.Email };
 
             var newuserResponse = await _userManager.CreateAsync(newuser, registerModel.Password);
             if (!newuserResponse.Succeeded)

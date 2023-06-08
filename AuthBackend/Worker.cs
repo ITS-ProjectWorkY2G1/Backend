@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Models;
 using Models.AuthModels;
 using OpenIddict.Abstractions;
 using static OpenIddict.Abstractions.OpenIddictConstants;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace AuthBackend
 {
@@ -9,12 +11,9 @@ namespace AuthBackend
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly ILogger<Worker> _logger;
-        private async Task CreateUsers(string _Username, string _Email)
+        private async Task CreateUsers(string _Username, string _Email, IServiceScope scope)
         {
             _logger.LogDebug("Worker - Creating users");
-            using var scope = _serviceProvider.CreateScope();
-
-            var _UserManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
             //Here you could create a super user who will maintain the web app
             var poweruser = new ApplicationUser
@@ -24,12 +23,8 @@ namespace AuthBackend
             };
             //Ensure you have these values in your appsettings.json file
             string userPWD = "Pwdpwd1!";
-            var _user = await _UserManager.FindByEmailAsync(_Email);
-
-            if (_user == null)
-            {
-                var createPowerUser = await _UserManager.CreateAsync(poweruser, userPWD);
-            }
+            var _usermanager = scope.ServiceProvider.GetRequiredService<Microsoft.AspNetCore.Identity.UserManager<ApplicationUser>>();
+            await _usermanager.CreateAsync(poweruser, userPWD);
         }
         public Worker(IServiceProvider serviceProvider, ILogger<Worker> logger)
         {
@@ -40,22 +35,19 @@ namespace AuthBackend
         {            
             _logger.LogDebug("//////////// Auth worker start ////////////");
             using var scope = _serviceProvider.CreateScope();
-            var _UserManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
-            var users = _UserManager.Users.Count();
+            var dbcontext = scope.ServiceProvider.GetRequiredService<WatchContext>();
 
-            await FillDb();
+            if (dbcontext.Users.Count() == 0) await FillDb(scope);
 
             _logger.LogDebug("//////////// Auth worker End ////////////");
         }
-        public async Task FillDb()
+        public async Task FillDb(IServiceScope scope)
         {
 
-            using var scope = _serviceProvider.CreateScope();
-
-            await CreateUsers("Admin", "admin@admin.com");
-
             var manager = scope.ServiceProvider.GetRequiredService<IOpenIddictApplicationManager>();
+
+            await CreateUsers("Admin", "admin@admin.com", scope);
 
             _logger.LogDebug("Creating OIDC applications");
             if (await manager.FindByClientIdAsync("mudblazorTest") == null)
