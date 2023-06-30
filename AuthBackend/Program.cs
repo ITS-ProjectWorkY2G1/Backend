@@ -1,21 +1,15 @@
 using Microsoft.AspNetCore.Identity;
 using AuthBackend;
 using static OpenIddict.Abstractions.OpenIddictConstants;
-using MongoDB.Driver;
 using Microsoft.IdentityModel.Tokens;
 using Models.AuthModels;
 using Microsoft.AspNetCore.Diagnostics;
 using static System.Net.Mime.MediaTypeNames;
 using log4net;
 using Models;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-
-var config = new ConfigurationBuilder()
-        .AddJsonFile("appsettings.json", optional: false)
-        .Build();
 
 builder.Services.AddDbContext<WatchContext>(opt =>
 {
@@ -79,17 +73,9 @@ builder.Services.AddOpenIddict()
         options.AddEncryptionKey(new SymmetricSecurityKey(
             Convert.FromBase64String("DTjd/GnduI1Kfzen8V8BvaNUfb/VKgXltV7Kbk8iNkY=")));
 
-#if (DEBUG)
-
-        options.AddDevelopmentEncryptionCertificate()
-               .AddDevelopmentSigningCertificate();
-
-#else
-        options.AddEncryptionCertificate(builder.Configuration["certificate:encryptionthumbprint"]!, StoreName.My, StoreLocation.LocalMachine)
-               .AddSigningCertificate(builder.Configuration["certificate:signingthumbprint"]!, StoreName.My, StoreLocation.LocalMachine);
-#endif
-
-
+        options.AddEphemeralEncryptionKey()
+                .AddEphemeralSigningKey();
+               
 
         // Register the ASP.NET Core host and configure the ASP.NET Core-specific options.
         //

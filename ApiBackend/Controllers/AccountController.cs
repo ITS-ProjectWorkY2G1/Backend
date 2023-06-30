@@ -14,7 +14,7 @@ namespace ApiBackend.Controllers
         {
             _accountService = accountService;
         }
-        [HttpPost("Register")]
+        [HttpPost("/Register")]
         public async Task<IActionResult> Register(RegisterModel registerModel)
         {
             try

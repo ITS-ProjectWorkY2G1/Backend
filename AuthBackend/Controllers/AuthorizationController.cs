@@ -22,7 +22,6 @@ namespace AuthBackend.Controllers.Api
         private readonly IOpenIddictAuthorizationManager _authorizationManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly IOpenIddictScopeManager _scopeManager;
         private readonly IServiceScopeFactory _scopeFactory;
         private readonly ILogger<AuthorizationController> _logger;

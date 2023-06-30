@@ -15,19 +15,19 @@ namespace ApiBackend.Controllers
         {
             _smartwatchService = smartwatchService;
         }
-        [HttpGet("GetSmartwatches")]
+        [HttpGet("/GetSmartwatches")]
         public async Task<List<Smartwatch>> GetSmartwatches(Guid userId, Guid sessionId) =>
             await _smartwatchService.GetSmartwatchAsync(userId, sessionId);
-        [HttpGet("GetAllSmartwatches")]
+        [HttpGet("/GetAllSmartwatches")]
         public async Task<List<Smartwatch>> GetAllSmartwatches() =>
             await _smartwatchService.GetAllSmartwatchesAsync();
-        [HttpGet("GetSessions")]
+        [HttpGet("/GetSessions")]
         public async Task<List<Session>> GetSessions(Guid userId) =>
             await _smartwatchService.GetSessionsAsync(userId);
-        [HttpGet("GetAllSessions")]
+        [HttpGet("/GetAllSessions")]
         public async Task<List<Session>> GetAllSessions() =>
             await _smartwatchService.GetAllSessionsAsync();
-        [HttpGet("GetFullSessionsList")]
+        [HttpGet("/GetFullSessionsList")]
         public async Task<List<FullSessionViewModel>> GetFullSessionsList(Guid userId) =>
             await _smartwatchService.GetFullSessionAsync(userId);
     }

@@ -16,7 +16,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<WatchContext>(opt =>
 {
-    opt.UseNpgsql("user id=postgres;password=password;host=pwg1db.uksouth.cloudapp.azure.com;database=postgres");
+    opt.UseNpgsql(builder.Configuration.GetConnectionString("db"));
 });
 
 builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
