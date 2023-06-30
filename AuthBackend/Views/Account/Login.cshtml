@@ -3,9 +3,9 @@
 
 @if (!User.Identity!.IsAuthenticated)
 {
-        <div class="card-body rounded-2 shadow" style="width: 40%; height:60vh; margin-left:40vh; margin-top:15vh; background-color:#50A5B1">
+        <div class="card-body rounded-2 shadow" style="width: 40%; height:auto; margin:auto; margin-top:20vh; background-color:#50A5B1">
             <div style="height:2rem ;color: white;border-radius:5px;text-align:center;font-family:sans-serif; font-size:30px">Login</div>
-            <form class="mt-5" style="width:100%;" id="account" method="post">
+            <form style="width:100%;" id="account" method="post">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-floating mt-4">
                     <input asp-for="UserName" class="form-control" autocomplete="username" aria-required="true" />
@@ -20,11 +20,9 @@
                 <div class="d-flex align-items-center justify-content-center">
                     <button id="login-submit" type="submit" class="w-25 btn btn-lg mt-4 shadow" style="background-color:#1A265A; color:white; font-family:sans-serif;">Log in</button>
                 </div>
-                <div style="margin-top:23vh">
-                    <span style="height:2rem ;color: white;border-radius:5px;">Not signed up yet?</span>
-                <a href="https://localhost:5001/Register">Click here</a>
-                </div>
             </form>
+        <span style="height:2rem ;color: white;border-radius:5px; margin-top:2vh">Not signed up yet?</span>
+        <a href="https://localhost:5001/Register">Click here</a>
         </div>
     
 }
