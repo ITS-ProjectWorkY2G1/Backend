@@ -11,6 +11,7 @@ namespace Services.Services
         public AccountService(UserManager<ApplicationUser> userManager)
         {
             _userManager = userManager;
+
         }
 
         public async Task RegisterAsync(RegisterModel registerModel)
