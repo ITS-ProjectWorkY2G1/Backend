@@ -58,5 +58,7 @@ namespace Services.Services
             await _context.Smartwatch.ToListAsync();
         public async Task<List<Session>> GetAllSessionsAsync() =>
             await _context.Session.ToListAsync();
+        public async Task<List<Smartwatch>> GetSmartwatchById(Guid Id)=>        
+            await _context.Smartwatch.Where(x => x.Id == Id).ToListAsync();
     }
 }

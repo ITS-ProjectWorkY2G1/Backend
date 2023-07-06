@@ -35,5 +35,8 @@ namespace ApiBackend.Controllers
         [Authorize]
         public async Task<List<FullSessionViewModel>> GetFullSessionsList(Guid userId) =>
             await _smartwatchService.GetFullSessionAsync(userId);
+        [HttpGet("/GetSmartwatchById")]
+        public async Task<List<Smartwatch>> GetSmartwatchById(Guid Id) =>
+            await _smartwatchService.GetSmartwatchById(Id);
     }
 }
